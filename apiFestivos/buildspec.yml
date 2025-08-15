@@ -3,12 +3,12 @@ version: 0.2
 env:
   variables:
     IMAGE_TAG: latest
+    ECR_REPOSITORY: 058264525154.dkr.ecr.us-east-2.amazonaws.com/apicontainer
 
 phases:
   install:
     runtime-versions:
       java: corretto17
-      docker: 24
     commands:
       - echo "Instalando dependencias..."
       - mvn --version
@@ -16,21 +16,22 @@ phases:
   pre_build:
     commands:
       - echo "Iniciando sesión en Amazon ECR..."
-      - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 058264525154.dkr.ecr.us-east-2.amazonaws.com/apicontainer
+      - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin $ECR_REPOSITORY
   build:
     commands:
       - echo "Construyendo proyecto Maven..."
       - mvn clean package -DskipTests
       - echo "Construyendo imagen Docker..."
       - docker build -t api-festivos .
-      - docker tag api-festivos:latest 058264525154.dkr.ecr.us-east-2.amazonaws.com/apicontainer:latest
+      - docker tag api-festivos:latest $ECR_REPOSITORY:$IMAGE_TAG
   post_build:
     commands:
       - echo "Subiendo imagen a ECR..."
-      - docker push 058264525154.dkr.ecr.us-east-2.amazonaws.com/apicontainer:latest
+      - docker push $ECR_REPOSITORY:$IMAGE_TAG
 
 artifacts:
   files:
     - '**/*'
+
 
 
