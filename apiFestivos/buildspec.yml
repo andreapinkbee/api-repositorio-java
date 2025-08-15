@@ -25,7 +25,7 @@ phases:
       - echo "Construyendo proyecto Maven completo..."
       - mvn clean package -DskipTests
       - echo "Construyendo imagen Docker..."
-      - docker build -t api-festivos .
+      - docker build -t api-festivos ./presentacion
       - docker tag api-festivos:latest $ECR_REPOSITORY:$IMAGE_TAG
 
   post_build:
