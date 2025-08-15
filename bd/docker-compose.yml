@@ -1,0 +1,19 @@
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres_festivos
+    restart: always
+    environment:
+      POSTGRES_USER: usuario_db
+      POSTGRES_PASSWORD: clave_db
+      POSTGRES_DB: Festivos
+    ports:
+      - "5433:5432"  # Puerto externo 5433 para evitar conflicto con otro Postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts:/docker-entrypoint-initdb.d  # Monta los scripts para inicializar
+volumes:
+  postgres_data:
+    
+
