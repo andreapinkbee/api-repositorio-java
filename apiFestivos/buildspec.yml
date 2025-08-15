@@ -9,6 +9,7 @@ phases:
   install:
     runtime-versions:
       java: corretto17
+      docker: 20
     commands:
       - echo "Instalando Maven y verificando versiones..."
       - mvn --version
@@ -18,12 +19,11 @@ phases:
   pre_build:
     commands:
       - echo "Iniciando sesión en Amazon ECR..."
-      - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin $ECR_REPOSITORY
+      - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 058264525154.dkr.ecr.us-east-2.amazonaws.com/apicontainer
 
   build:
     commands:
       - echo "Compilando proyecto Maven... sin contenedores"
-      - mvn clean package -DskipTests
 
   post_build:
     commands:
