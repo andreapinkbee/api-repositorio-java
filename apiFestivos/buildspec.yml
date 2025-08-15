@@ -13,7 +13,7 @@ phases:
       - echo "Preparando build..."
   build:
     commands:
-      - echo "Compilando todos los módulos Maven..."
+      - echo "Compilando todos los módulos Maven....."
       - mvn clean install -DskipTests
   post_build:
     commands:
