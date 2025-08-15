@@ -5,19 +5,21 @@ phases:
     runtime-versions:
       java: corretto17
     commands:
-      - echo "Instalando dependencias..."
-      - mvn --version
+      - echo "Verificando Java y Maven..."
+      - java -version
+      - mvn -version
   pre_build:
     commands:
       - echo "Preparando build..."
   build:
     commands:
-      - echo "Construyendo proyecto Maven..."
-      - mvn clean package -DskipTests
+      - echo "Compilando módulo 'presentacion' y sus dependencias..."
+      - mvn clean package -pl presentacion -am -DskipTests
   post_build:
     commands:
-      - echo "Build completado"
+      - echo "Build completado correctamente"
 
 artifacts:
   files:
-    - target/**/*.jar
+    - presentacion/target/**/*.jar
+
