@@ -22,15 +22,8 @@ phases:
 
   build:
     commands:
-      - echo "Construyendo imagen Docker (sin Maven)..."
-      - docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
-      - echo "Verificando imágenes Docker..."
-      - docker images
-      - echo "Listando contenedores Docker..."
-      - docker ps -a
-      - echo "Verificando estado de Docker..."
-      - docker info
-      
+      - echo "Construyendo imagen Docker (sin Maven)...."
+
   post_build:
     commands:
       - echo "Subiendo imagen a ECR..."
