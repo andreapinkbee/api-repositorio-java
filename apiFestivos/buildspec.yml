@@ -5,6 +5,14 @@ env:
     IMAGE_TAG: latest
 
 phases:
+  install:
+    runtime-versions:
+      java: corretto17
+      docker: 24
+    commands:
+      - echo "Instalando dependencias..."
+      - mvn --version
+      - docker --version
   pre_build:
     commands:
       - echo "Iniciando sesión en Amazon ECR..."
