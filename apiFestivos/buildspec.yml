@@ -23,11 +23,12 @@ phases:
   build:
     commands:
       - echo "Compilando proyecto Maven... sin contenedores"
+      - mvn clean package -DskipTests
 
   post_build:
     commands:
       - echo "Subiendo imagen a ECR..."
-      - docker push $ECR_REPOSITORY:$IMAGE_TAG
+      - docker push 058264525154.dkr.ecr.us-east-2.amazonaws.com/apicontainer
       - echo "Build y push finalizados correctamente."
 
 artifacts:
