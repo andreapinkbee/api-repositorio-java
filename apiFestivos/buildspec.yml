@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    ECR_REPOSITORY: 058264525154.dkr.ecr.us-east-2.amazonaws.com/apicontainer
+    ECR_REPOSITORY: "058264525154.dkr.ecr.us-east-2.amazonaws.com/apicontainer"
     IMAGE_TAG: latest
 
 phases:
