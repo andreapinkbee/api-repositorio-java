@@ -2,36 +2,38 @@ version: 0.2
 
 env:
   variables:
-    IMAGE_TAG: latest
     ECR_REPOSITORY: "058264525154.dkr.ecr.us-east-2.amazonaws.com/apicontainer"
+    IMAGE_TAG: "latest"
 
 phases:
   install:
     runtime-versions:
       java: corretto17
     commands:
-      - echo "Instalando dependencias y verificando versiones..."
+      - echo "Instalando Maven y verificando versiones..."
       - mvn --version
+      - echo "Verificando Docker..."
       - docker --version
+
   pre_build:
     commands:
       - echo "Iniciando sesión en Amazon ECR..."
       - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin $ECR_REPOSITORY
+
   build:
     commands:
-      - echo "Construyendo proyecto Maven (multi-módulo si aplica)..."
-      - mvn clean package -pl presentacion -am -DskipTests
+      - echo "Construyendo proyecto Maven completo..."
+      - mvn clean package -DskipTests
       - echo "Construyendo imagen Docker..."
       - docker build -t api-festivos .
       - docker tag api-festivos:latest $ECR_REPOSITORY:$IMAGE_TAG
+
   post_build:
     commands:
       - echo "Subiendo imagen a ECR..."
       - docker push $ECR_REPOSITORY:$IMAGE_TAG
+      - echo "Build y push finalizados correctamente."
+
 artifacts:
   files:
     - '**/*'
-
-
-
-
