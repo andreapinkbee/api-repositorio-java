@@ -23,8 +23,6 @@ phases:
   build:
     commands:
       - echo "Construyendo imagen Docker (sin Maven)...
-      - docker build -t api-festivos .
-      - docker tag api-festivos:latest $ECR_REPOSITORY:$IMAGE_TAG
 
   post_build:
     commands:
