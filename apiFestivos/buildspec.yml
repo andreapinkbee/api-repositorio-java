@@ -13,13 +13,14 @@ phases:
       - echo "Preparando build..."
   build:
     commands:
-      - echo "Compilando módulo 'presentacion' y sus dependencias..."
-      - mvn clean package -DskipTests
+      - echo "Compilando todos los módulos Maven..."
+      - mvn clean install -DskipTests
   post_build:
     commands:
       - echo "Build completado correctamente"
 
 artifacts:
   files:
-    - presentacion/target/**/*.jar
+    - '**/target/*.jar'
+
 
