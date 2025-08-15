@@ -23,7 +23,9 @@ phases:
   build:
     commands:
       - echo "Compilando proyecto Maven... sin contenedores"
-      - mvn clean package -DskipTests
+      - docker build -t api-festivos .
+      - echo "Taggeando imagen..."
+      - docker tag api-festivos:latest aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 058264525154.dkr.ecr.us-east-2.amazonaws.com/apicontainer
 
   post_build:
     commands:
