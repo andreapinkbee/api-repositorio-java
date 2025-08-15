@@ -22,7 +22,8 @@ phases:
 
   build:
     commands:
-      - echo "Construyendo imagen Docker (sin Maven)...."
+      - echo "Compilando proyecto Maven... sin contenedores"
+      - mvn clean package -pl presentacion -am -DskipTests
 
   post_build:
     commands:
