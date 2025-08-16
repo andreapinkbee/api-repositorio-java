@@ -14,30 +14,12 @@ phases:
       - java -version
       - cd apiFestivos
       - mvn -version
-       # --- FRONTEND ---
-      - echo "Instalando dependencias del frontend..."
-      - cd $CODEBUILD_SRC_DIR/frontendFestivos
-      - npm install
-      - echo "Dependencias del frontend instaladas correctamente" 
-      - echo "Instalando Angular CLI..."
-      - npm install -g @angular/cli
-      - echo "Angular CLI instalado correctamente"
   pre_build:
     commands:
       - echo "Iniciando sesión en Amazon ECR..."
       - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin $ECR_REPOSITORY
   build:
     commands:
-      # --- FRONTEND ---
-      - echo "Compilando frontend Angular..."
-      - cd $CODEBUILD_SRC_DIR/frontendFestivos
-      - npm run build
-      - echo "Frontend compilado correctamente"
-      - echo "Copiando frontend al backend..."
-      - cp -r $CODEBUILD_SRC_DIR/frontendFestivos/dist/* $CODEBUILD_SRC_DIR/apiFestivos/presentacion/src/main/resources/static/
-      - echo "Frontend copiado al backend correctamente"
-      # --- FIN FRONTEND ---
-      - cd ../apiFestivos
       - echo "Compilando todos los módulos Maven....."
       - mvn clean install -DskipTests
       - echo "Construyendo imagen Docker..."
@@ -47,6 +29,7 @@ phases:
     commands:
      - echo "Subiendo imagen a ECR..."
       - docker push $ECR_REPOSITORY:$IMAGE_TAG
+      - echo "Build completado correctamente"
       - echo "Build completado correctamente"
 
 artifacts:
