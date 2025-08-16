@@ -6,7 +6,24 @@ env:
     ECR_REPOSITORY: "058264525154.dkr.ecr.us-east-2.amazonaws.com/apicontainer"
 
 phases:
-  install:
+install_frontend:
+  commands:
+    - echo "Instalando dependencias del frontend..."
+    - cd ../frontendFestivos
+    - npm install
+
+build_frontend:
+  commands:
+    - echo "Compilando frontend Angular..."
+    - npm run build 
+    - echo "Frontend compilado correctamente"
+post_build_frontend:
+  commands:
+    - echo "Copiando frontend compilado al backend..."
+    - cp -r dist/* ../apiFestivos/presentacion/src/main/resources/static/
+    - echo "Frontend listo en el backend"
+
+  install_backend:
     runtime-versions:
       java: corretto17
     commands:
@@ -14,18 +31,18 @@ phases:
       - java -version
       - cd apiFestivos
       - mvn -version
-  pre_build:
+  pre_build_backend:
     commands:
       - echo "Iniciando sesión en Amazon ECR..."
       - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin $ECR_REPOSITORY
-  build:
+  build_backend:
     commands:
       - echo "Compilando todos los módulos Maven....."
       - mvn clean install -DskipTests
       - echo "Construyendo imagen Docker..."
       - docker build -t api-festivos .
       - docker tag api-festivos:latest $ECR_REPOSITORY:$IMAGE_TAG
-  post_build:
+  post_build_backend:
     commands:
      - echo "Subiendo imagen a ECR..."
       - docker push $ECR_REPOSITORY:$IMAGE_TAG
