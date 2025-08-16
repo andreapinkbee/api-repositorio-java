@@ -14,24 +14,27 @@ phases:
       - java -version
       - cd apiFestivos
       - mvn -version
-      # --- INICIO FRONTEND ---
-      - echo "Instalando Node.js para frontend..."
-      - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash && export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" && nvm install 20 && nvm use 20
-      - echo "Instalando dependencias de Node.js..."
+       # --- FRONTEND ---
+      - echo "Instalando dependencias del frontend..."
       - cd $CODEBUILD_SRC_DIR/frontendFestivos
       - npm install
+      - echo "Dependencias del frontend instaladas correctamente" 
+      - echo "Instalando Angular CLI..."
+      - npm install -g @angular/cli
+      - echo "Angular CLI instalado correctamente"
   pre_build:
     commands:
       - echo "Iniciando sesión en Amazon ECR..."
       - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin $ECR_REPOSITORY
   build:
     commands:
+      # --- FRONTEND ---
       - echo "Compilando frontend Angular..."
       - cd $CODEBUILD_SRC_DIR/frontendFestivos
       - npm run build
       - echo "Frontend compilado correctamente"
       - echo "Copiando frontend al backend..."
-      - cp -r dist/* ../apiFestivos/presentacion/src/main/resources/static/
+      - cp -r $CODEBUILD_SRC_DIR/frontendFestivos/dist/* $CODEBUILD_SRC_DIR/apiFestivos/presentacion/src/main/resources/static/
       - echo "Frontend copiado al backend correctamente"
       # --- FIN FRONTEND ---
       - cd ../apiFestivos
