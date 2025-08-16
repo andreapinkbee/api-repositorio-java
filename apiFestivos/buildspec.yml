@@ -18,7 +18,7 @@ phases:
       - echo "Instalando Node.js para frontend..."
       - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash && export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" && nvm install 20 && nvm use 20
       - echo "Instalando dependencias de Node.js..."
-      - cd frontendFestivos
+      - cd $CODEBUILD_SRC_DIR/frontendFestivos
       - npm install
   pre_build:
     commands:
@@ -27,7 +27,7 @@ phases:
   build:
     commands:
       - echo "Compilando frontend Angular..."
-      - cd frontendFestivos
+      - cd $CODEBUILD_SRC_DIR/frontendFestivos
       - npm run build
       - echo "Frontend compilado correctamente"
       - echo "Copiando frontend al backend..."
