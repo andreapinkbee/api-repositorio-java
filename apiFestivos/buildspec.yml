@@ -6,24 +6,7 @@ env:
     ECR_REPOSITORY: "058264525154.dkr.ecr.us-east-2.amazonaws.com/apicontainer"
 
 phases:
-install_frontend:
-  commands:
-    - echo "Instalando dependencias del frontend..."
-    - cd ../frontendFestivos
-    - npm install
-
-build_frontend:
-  commands:
-    - echo "Compilando frontend Angular..."
-    - npm run build 
-    - echo "Frontend compilado correctamente"
-post_build_frontend:
-  commands:
-    - echo "Copiando frontend compilado al backend..."
-    - cp -r dist/* ../apiFestivos/presentacion/src/main/resources/static/
-    - echo "Frontend listo en el backend"
-
-  install_backend:
+  install:
     runtime-versions:
       java: corretto17
     commands:
@@ -31,22 +14,36 @@ post_build_frontend:
       - java -version
       - cd apiFestivos
       - mvn -version
-  pre_build_backend:
+      # --- INICIO FRONTEND ---
+      - echo "Instalando Node.js para frontend..."
+      - curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+      - apt-get install -y nodejs
+      - cd ../../frontendFestivos
+      - npm install
+  pre_build:
     commands:
       - echo "Iniciando sesión en Amazon ECR..."
       - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin $ECR_REPOSITORY
-  build_backend:
+  build:
     commands:
+      - echo "Compilando frontend Angular..."
+      - cd frontendFestivos
+      - npm run build
+      - echo "Frontend compilado correctamente"
+      - echo "Copiando frontend al backend..."
+      - cp -r dist/* ../apiFestivos/presentacion/src/main/resources/static/
+      - echo "Frontend copiado al backend correctamente"
+      # --- FIN FRONTEND ---
+      - cd ../apiFestivos
       - echo "Compilando todos los módulos Maven....."
       - mvn clean install -DskipTests
       - echo "Construyendo imagen Docker..."
       - docker build -t api-festivos .
       - docker tag api-festivos:latest $ECR_REPOSITORY:$IMAGE_TAG
-  post_build_backend:
+  post_build:
     commands:
      - echo "Subiendo imagen a ECR..."
       - docker push $ECR_REPOSITORY:$IMAGE_TAG
-      - echo "Build completado correctamente"
       - echo "Build completado correctamente"
 
 artifacts:
