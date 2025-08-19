@@ -1,4 +1,4 @@
 export const environment = {
     production: false,
-    urlService: 'http://3.144.44.246:9090/api/',
+    urlService: 'https://bf45e5a6a943.ngrok-free.app/api/',
   };
