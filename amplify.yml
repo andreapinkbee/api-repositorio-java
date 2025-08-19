@@ -1,0 +1,18 @@
+version: 1
+applications:
+  - frontend:
+      phases:
+        preBuild:
+          commands:
+            - cd frontendFestivos
+            - npm ci
+        build:
+          commands:
+            - npm run build -- --configuration production
+      artifacts:
+        baseDirectory: frontendFestivos/dist/festivos
+        files:
+          - '**/*'
+      cache:
+        paths:
+          - frontendFestivos/node_modules/**/*
