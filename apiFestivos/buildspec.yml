@@ -35,5 +35,6 @@ phases:
 artifacts:
   files:
     - '**/target/*.jar'
+    - imagedefinitions.json
 privileged: true
 
