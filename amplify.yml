@@ -10,7 +10,7 @@ applications:
           commands:
             - npm run build -- --configuration production
       artifacts:
-        baseDirectory: frontendFestivos/dist/festivos
+        baseDirectory: frontendFestivos/dist/festivos/browser
         files:
           - '**/*'
       cache:
