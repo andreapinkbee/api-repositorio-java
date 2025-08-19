@@ -29,7 +29,7 @@ phases:
     commands:
       - echo "Subiendo imagen a ECR..."
       - docker push $ECR_REPOSITORY:$IMAGE_TAG
-      - printf '[{"name":"api-festivos","imageUri":"%s"}]' $ECR_REPOSITORY:$IMAGE_TAG > $CODEBUILD_SRC_DIR/imagedefinitions.json
+      - printf '[{"name":"backendcontenedortarea","imageUri":"%s"}]' $ECR_REPOSITORY:$IMAGE_TAG > $CODEBUILD_SRC_DIR/imagedefinitions.json
       - echo "Archivo de definiciones de imagen creado"
       - echo "Build completado correctamente"
       - echo "Build completado correctamente"
